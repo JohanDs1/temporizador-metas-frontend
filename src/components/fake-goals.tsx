@@ -30,18 +30,16 @@ export function FakeGoals({ mockedGoals, setMockedGoals, now, mounted, openNew, 
         sorted.length === 0 ? (
             <EmptyGoalsState onCreate={openNew} />
         ) : (
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                {sorted.map((goal) => (
-                    <GoalCard
-                        key={goal.id}
-                        goal={goal}
-                        now={now}
-                        mounted={mounted}
-                        onEdit={openEdit}
-                        onDelete={handleDelete}
-                    />
-                ))}
-            </div>
+            sorted.map((goal) => (
+                <GoalCard
+                    key={goal.id}
+                    goal={goal}
+                    now={now}
+                    mounted={mounted}
+                    onEdit={openEdit}
+                    onDelete={handleDelete}
+                />
+            ))
         )
     )
 

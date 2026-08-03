@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom"
 import { mockGoals } from "@/lib/goals.mockdata"
 import type { Goal } from "@/types/goals"
 import { UserGoals } from "@/components/user-goals"
+import { GoalCardSkeleton } from "@/components/goal-skeleton"
 
 interface GoalDashboardProps {
   username: string
@@ -107,27 +108,30 @@ export function GoalDashboard({ username, onLogout }: GoalDashboardProps) {
         </header>
 
         <section className="mt-8" aria-label="Metas activas">
-          {
-            isLoggedIn && user ? (
-              <UserGoals
-                userId={user?.id}
-                now={now}
-                mounted={mounted}
-                openNew={openNew}
-                openEdit={openEdit}
-              />
-            ) :
-              (
-                <FakeGoals
-                  mockedGoals={mockedGoals}
-                  setMockedGoals={setMockedGoals}
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            {
+              isLoggedIn && user ? (
+                <UserGoals
+                  userId={user?.id}
                   now={now}
                   mounted={mounted}
                   openNew={openNew}
                   openEdit={openEdit}
                 />
-              )
-          }
+              ) :
+                (
+                  <FakeGoals
+                    mockedGoals={mockedGoals}
+                    setMockedGoals={setMockedGoals}
+                    now={now}
+                    mounted={mounted}
+                    openNew={openNew}
+                    openEdit={openEdit}
+                  />
+                )
+            }
+          </div>
 
         </section>
       </div>

@@ -3,6 +3,7 @@ import type { Goal } from "@/types/goals"
 import { useEffect, useState } from "react"
 import { GoalCard } from "./goal-card"
 import { EmptyGoalsState } from "./empty-goals-state"
+import { GoalCardSkeleton } from "./goal-skeleton"
 
 interface UserGoalsProps {
     userId: number
@@ -14,6 +15,7 @@ interface UserGoalsProps {
 
 export function UserGoals({ userId, now, mounted, openNew, openEdit }: UserGoalsProps) {
     const [userGoals, setUserGoals] = useState<Goal[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
         const fetchGoals = async () => {
@@ -21,26 +23,36 @@ export function UserGoals({ userId, now, mounted, openNew, openEdit }: UserGoals
             if (response.success) {
                 setUserGoals(response.goals)
             }
+            setLoading(false)
         }
         fetchGoals()
     }, [userId])
+
+    if (loading || !mounted) {
+        return <GoalCardSkeleton />
+    }
+
+    if (!userGoals) {
+        return <p className="text-center text-muted-foreground">No se pudieron cargar las metas del usuario.</p>
+    }
+
 
     return (
         userGoals.length === 0 ? (
             <EmptyGoalsState onCreate={openNew} />
         ) : (
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                {userGoals.map((goal) => (
-                    <GoalCard
-                        key={goal.id}
-                        goal={goal}
-                        now={now}
-                        mounted={mounted}
-                        onEdit={openEdit}
-                        //onDelete={handleDelete}
-                    />
-                ))}
-            </div>
+
+            userGoals.map((goal) => (
+                <GoalCard
+                    key={goal.id}
+                    goal={goal}
+                    now={now}
+                    mounted={mounted}
+                    onEdit={openEdit}
+                //onDelete={handleDelete}
+                />
+            ))
+
         )
     )
 
