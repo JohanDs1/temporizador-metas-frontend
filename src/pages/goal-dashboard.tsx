@@ -2,15 +2,14 @@ import { useEffect, useState } from "react"
 import { Button } from "../components/ui/button"
 import { LogOut, Plus } from "lucide-react"
 import { GoalDialog } from "../components/goal-dialog"
+import { FakeGoals } from "../components/fake-goals"
 import { ThemeToggle } from "../components/theme-toggle"
-import { EmptyGoalsState } from "../components/empty-goals-state"
-import { GoalCard } from "../components/goal-card"
 import { displayName } from "@/lib/auth"
 import { useAuthStore } from "@/stores/auth-store"
 import { useNavigate } from "react-router-dom"
 import { mockGoals } from "@/lib/goals.mockdata"
 import type { Goal } from "@/types/goals"
-import { getGoalStatus } from "@/lib/goals.utils"
+import { UserGoals } from "@/components/user-goals"
 
 interface GoalDashboardProps {
   username: string
@@ -19,15 +18,14 @@ interface GoalDashboardProps {
 
 
 export function GoalDashboard({ username, onLogout }: GoalDashboardProps) {
-  const [goals, setGoals] = useState<Goal[]>(mockGoals)
+  const [mockedGoals, setMockedGoals] = useState<Goal[]>(mockGoals)
   const [now, setNow] = useState<number>(() => Date.now())
   const [mounted, setMounted] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editing, setEditing] = useState<Goal | null>(null)
-  const { isLoggedIn } = useAuthStore()
+  const { isLoggedIn, user } = useAuthStore()
   const navigate = useNavigate()
 
-  // Single shared clock: ticks every second and drives every countdown.
   useEffect(() => {
     setMounted(true)
     setNow(Date.now())
@@ -45,22 +43,13 @@ export function GoalDashboard({ username, onLogout }: GoalDashboardProps) {
     setDialogOpen(true)
   }
 
-  function handleSave(goal: Goal) {
-    setGoals((prev) => {
+  function handleSaveMockedGoals(goal: Goal) {
+    setMockedGoals((prev) => {
       const exists = prev.some((g) => g.id === goal.id)
       return exists ? prev.map((g) => (g.id === goal.id ? goal : g)) : [goal, ...prev]
     })
   }
 
-  function handleDelete(goal: Goal) {
-    setGoals((prev) => prev.filter((g) => g.id !== goal.id))
-  }
-
-  // Show active/overdue goals before completed ones for better focus.
-  const sorted = [...goals].sort((a, b) => {
-    const rank = (g: Goal) => (getGoalStatus(g, now) === "completed" ? 1 : 0)
-    return rank(a) - rank(b)
-  })
 
   return (
     <main className="min-h-svh px-5 py-10 sm:px-8 sm:py-16">
@@ -118,22 +107,28 @@ export function GoalDashboard({ username, onLogout }: GoalDashboardProps) {
         </header>
 
         <section className="mt-8" aria-label="Metas activas">
-          {sorted.length === 0 ? (
-            <EmptyGoalsState onCreate={openNew} />
-          ) : (
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-              {sorted.map((goal) => (
-                <GoalCard
-                  key={goal.id}
-                  goal={goal}
+          {
+            isLoggedIn && user ? (
+              <UserGoals
+                userId={user?.id}
+                now={now}
+                mounted={mounted}
+                openNew={openNew}
+                openEdit={openEdit}
+              />
+            ) :
+              (
+                <FakeGoals
+                  mockedGoals={mockedGoals}
+                  setMockedGoals={setMockedGoals}
                   now={now}
                   mounted={mounted}
-                  onEdit={openEdit}
-                  onDelete={handleDelete}
+                  openNew={openNew}
+                  openEdit={openEdit}
                 />
-              ))}
-            </div>
-          )}
+              )
+          }
+
         </section>
       </div>
 
@@ -141,7 +136,7 @@ export function GoalDashboard({ username, onLogout }: GoalDashboardProps) {
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         goal={editing}
-        onSave={handleSave}
+        onSave={handleSaveMockedGoals}
       />
     </main>
   )

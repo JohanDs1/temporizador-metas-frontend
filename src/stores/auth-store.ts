@@ -1,7 +1,6 @@
-import { create } from 'zustand'
-import Cookies from 'js-cookie'
-import type {User} from '@/lib/user'
-
+import { create } from "zustand"
+import Cookies from "js-cookie"
+import type { User } from "@/lib/user"
 
 
 interface AuthState {
@@ -11,41 +10,46 @@ interface AuthState {
   logout: () => void
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: (() => {
-    const storedUser = Cookies.get('user')
+const getStoredUser = (): User | null => {
+  const storedUser = Cookies.get("user")
 
-    if (!storedUser) {
-      return null
-    }
+  if (!storedUser) {
+    return null
+  }
 
-    try {
-      return JSON.parse(storedUser)
-    } catch {
-      Cookies.remove('user')
-      return null
-    }
-  })(),
+  try {
+    return JSON.parse(storedUser)
+  } catch {
+    Cookies.remove("user")
+    return null
+  }
+}
 
-  isLoggedIn: !!Cookies.get('user'),
+export const useAuthStore = create<AuthState>((set) => {
+  const storedUser = getStoredUser()
 
-  login: (user) => {
-    Cookies.set('user', JSON.stringify(user), {
-      expires: 7,
-    })
+  return {
+    user: storedUser,
+    isLoggedIn: storedUser !== null,
 
-    set({
-      user,
-      isLoggedIn: true,
-    })
-  },
+    login: (user) => {
+      Cookies.set("user", JSON.stringify(user), {
+        expires: 7,
+      })
 
-  logout: () => {
-    Cookies.remove('user')
+      set({
+        user,
+        isLoggedIn: true,
+      })
+    },
 
-    set({
-      user: null,
-      isLoggedIn: false,
-    })
-  },
-}))
+    logout: () => {
+      Cookies.remove("user")
+
+      set({
+        user: null,
+        isLoggedIn: false,
+      })
+    },
+  }
+})

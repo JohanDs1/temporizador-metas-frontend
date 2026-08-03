@@ -11,7 +11,7 @@ export const getUser = async (userName: string): Promise<ResponseUser> => {
         const userData = await response.json()
 
         if(!response.ok) {
-            console.error("Error fetching user data:", userData)
+            //console.error("Error fetching user data:", userData)
             return {success: false, message: userData.message}
         }
 
