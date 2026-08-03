@@ -1,13 +1,19 @@
 import './App.css'
-import { GoalDashboard } from './components/goal-dashboard'
+import { GoalDashboard } from './pages/goal-dashboard'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { LoginScreen } from './pages/login-screen';
 
 function App() {
+  const isLoggedIn = true;
 
   return (
-    <>
-    <GoalDashboard/>
-    </>
+    <Router>
+      <Routes>
+        //Logica simple por el momento
+        <Route path="/" element={isLoggedIn ? <GoalDashboard /> : <LoginScreen />} />
+      </Routes>
+    </Router>
   )
 }
 
-export default App
+export default App;

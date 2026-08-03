@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
-import { Button } from "./ui/button"
+import { Button } from "../components/ui/button"
 import { Plus } from "lucide-react"
-import { GoalDialog } from "./goal-dialog"
-import { ThemeToggle } from "./theme-toggle"
-import { EmptyGoalsState } from "./empty-goals-state"
-import { GoalCard } from "./goal-card"
+import { GoalDialog } from "../components/goal-dialog"
+import { ThemeToggle } from "../components/theme-toggle"
+import { EmptyGoalsState } from "../components/empty-goals-state"
+import { GoalCard } from "../components/goal-card"
 import { getGoalStatus, mockGoals, type Goal } from "@/lib/goals"
 
 
