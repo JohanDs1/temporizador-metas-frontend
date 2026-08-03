@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import type { Goal } from "@/lib/goals"
+import type { Goal } from "@/lib/goals.mockdata"
 
 interface GoalDialogProps {
   open: boolean

@@ -1,4 +1,4 @@
-import type { Goal } from "./goals";
+import type { Goal } from "@/types/goals";
 import type { User } from "./user";
 
 export interface ResponseGoals {

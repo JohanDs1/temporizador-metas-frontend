@@ -8,7 +8,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { CountdownTimer } from "@/components/countdown-timer"
-import { getGoalStatus, getProgress, getTimeRemaining, type Goal } from "@/lib/goals"
+import type { Goal } from "@/types/goals"
+import { getGoalStatus, getProgress, getTimeRemaining } from "@/lib/goals.utils"
 
 interface GoalCardProps {
   goal: Goal

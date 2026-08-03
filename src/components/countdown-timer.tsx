@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import type { GoalStatus, TimeParts } from "@/lib/goals"
+import type { GoalStatus, TimeParts } from "@/lib/goals.mockdata"
 
 interface CountdownTimerProps {
   time: TimeParts

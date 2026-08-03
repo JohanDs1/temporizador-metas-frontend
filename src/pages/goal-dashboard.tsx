@@ -1,19 +1,31 @@
 import { useEffect, useState } from "react"
 import { Button } from "../components/ui/button"
-import { Plus } from "lucide-react"
+import { LogOut, Plus } from "lucide-react"
 import { GoalDialog } from "../components/goal-dialog"
 import { ThemeToggle } from "../components/theme-toggle"
 import { EmptyGoalsState } from "../components/empty-goals-state"
 import { GoalCard } from "../components/goal-card"
-import { getGoalStatus, mockGoals, type Goal } from "@/lib/goals"
+import { displayName } from "@/lib/auth"
+import { useAuthStore } from "@/stores/auth-store"
+import { useNavigate } from "react-router-dom"
+import { mockGoals } from "@/lib/goals.mockdata"
+import type { Goal } from "@/types/goals"
+import { getGoalStatus } from "@/lib/goals.utils"
+
+interface GoalDashboardProps {
+  username: string
+  onLogout: () => void
+}
 
 
-export function GoalDashboard() {
+export function GoalDashboard({ username, onLogout }: GoalDashboardProps) {
   const [goals, setGoals] = useState<Goal[]>(mockGoals)
   const [now, setNow] = useState<number>(() => Date.now())
   const [mounted, setMounted] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editing, setEditing] = useState<Goal | null>(null)
+  const { isLoggedIn } = useAuthStore()
+  const navigate = useNavigate()
 
   // Single shared clock: ticks every second and drives every countdown.
   useEffect(() => {
@@ -55,6 +67,14 @@ export function GoalDashboard() {
       <div className="mx-auto w-full max-w-5xl">
         <header className="flex flex-col gap-5 border-b border-border pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div className="space-y-1.5">
+            {
+              isLoggedIn && (
+                <p className="text-sm font-medium text-muted-foreground">
+                  Hola, <span className="text-foreground">{displayName(username)}</span>
+                </p>
+              )
+            }
+
             <h1 className="text-3xl font-semibold tracking-tight text-foreground text-balance sm:text-4xl">
               Temporizador de Metas
             </h1>
@@ -62,10 +82,38 @@ export function GoalDashboard() {
           </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <Button onClick={openNew} className="gap-2 rounded-full px-5 sm:self-auto">
-              <Plus className="size-4" />
-              Nueva meta
-            </Button>
+            {
+              isLoggedIn ? (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={onLogout}
+                  className="rounded-full text-muted-foreground"
+                  aria-label="Cerrar sesión"
+                >
+                  <LogOut className="size-4" />
+                </Button>
+              ) :
+                (
+                  <Button
+                    onClick={() => navigate("/login")}
+                    className="rounded-full"
+                    aria-label="Cerrar sesión"
+                  >
+                    Iniciar Sesión
+                  </Button>
+                )
+
+            }
+            {
+              isLoggedIn && (
+                <Button onClick={openNew} className="gap-2 rounded-full px-5 sm:self-auto">
+                  <Plus className="size-4" />
+                  Nueva meta
+                </Button>
+              )
+            }
+
           </div>
         </header>
 

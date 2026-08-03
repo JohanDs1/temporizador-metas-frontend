@@ -1,22 +1,34 @@
+import { getUser } from "@/api/user"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useAuthStore } from "@/stores/auth-store"
 import { ArrowRight, Timer } from "lucide-react"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export function LoginScreen() {
     const [username, setUsername] = useState("")
     const [error, setError] = useState<string | null>(null)
+    const login = useAuthStore((state) => state.login)
+    const navigate = useNavigate()
     
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
         if (!username.trim()) {
             setError("El nombre de usuario es obligatorio")
             return
         }
         setError(null)
-        // Handle login logic here
+
+        const resultado = await getUser(username)
+        if (resultado.success && resultado.user) {
+            login(resultado.user)
+            navigate("/")
+        } else {
+            setError("Usuario no encontrado")
+        }
     }
 
     return (
