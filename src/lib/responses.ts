@@ -9,7 +9,7 @@ export interface ResponseGoals {
 export interface ResponseGoal {
     success: boolean;
     message?: string;
-    goals: Goal;
+    goal?: Goal | [];
 }
 
 export interface ResponseUser {

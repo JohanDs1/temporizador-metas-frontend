@@ -1,15 +1,15 @@
 export type GoalStatus = "active" | "completed" | "overdue"
 
 export interface Goal {
-  id: number;
-  user_id: number;
+  id?: number;
+  userId: number;
   name: string;
-  description: string | undefined;
-  start_date: string;
-  target_date: string;
-  completed: number | undefined;
-  created_at: string;
-  updated_at: string;
+  description?: string | undefined;
+  startDate: string;
+  targetDate: string;
+  completed?: number | undefined;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface TimeParts {

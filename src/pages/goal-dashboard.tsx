@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom"
 import { mockGoals } from "@/lib/goals.mockdata"
 import type { Goal } from "@/types/goals"
 import { UserGoals } from "@/components/user-goals"
-import { GoalCardSkeleton } from "@/components/goal-skeleton"
 
 interface GoalDashboardProps {
   username: string
@@ -34,6 +33,8 @@ export function GoalDashboard({ username, onLogout }: GoalDashboardProps) {
     return () => clearInterval(id)
   }, [])
 
+
+
   function openNew() {
     setEditing(null)
     setDialogOpen(true)
@@ -50,6 +51,13 @@ export function GoalDashboard({ username, onLogout }: GoalDashboardProps) {
       return exists ? prev.map((g) => (g.id === goal.id ? goal : g)) : [goal, ...prev]
     })
   }
+
+  /* async function handleSaveUserGoals(goal: Goal) {
+    const response = await createGoal(goal)
+    if (!response.success) {
+      console.error("Error saving user goal:", response.message)
+    }
+  } */
 
 
   return (

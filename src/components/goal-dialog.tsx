@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import type { Goal } from "@/lib/goals.mockdata"
+import type { Goal } from "@/types/goals"
 
 interface GoalDialogProps {
   open: boolean
@@ -45,7 +45,7 @@ export function GoalDialog({ open, onOpenChange, goal, onSave }: GoalDialogProps
     if (!name.trim() || !targetDate) return
     onSave({
       id: goal?.id ?? Math.floor(Math.random() * 1000000), // Temporary ID for new goals
-      user_id: goal?.user_id ?? 1, // Default user ID for new goals
+      userId: goal?.userId ?? 1, // Default user ID for new goals
       name: name.trim(),
       description: description.trim() || undefined,
       start_date: new Date(startDate || Date.now()).toISOString(),
@@ -103,7 +103,9 @@ export function GoalDialog({ open, onOpenChange, goal, onSave }: GoalDialogProps
                 id="goal-start"
                 type="date"
                 value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+                onChange={(e) => {
+                  console.log("Start date changed:", e.target.value)
+                  setStartDate(e.target.value)}}
               />
             </div>
             <div className="space-y-2">

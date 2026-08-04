@@ -1,10 +1,9 @@
 import { cn } from "@/lib/utils"
-import type { GoalStatus, TimeParts } from "@/lib/goals.mockdata"
+import type { GoalStatus, TimeParts } from "@/types/goals"
 
 interface CountdownTimerProps {
   time: TimeParts
   status: GoalStatus
-  /** Prevents SSR/client mismatch: renders placeholders until mounted. */
   mounted?: boolean
 }
 

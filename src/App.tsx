@@ -5,7 +5,7 @@ import { LoginScreen } from './pages/login-screen';
 import { useAuthStore } from './stores/auth-store';
 
 function App() {
-  const { isLoggedIn, user, logout } = useAuthStore()
+  const { user, logout } = useAuthStore()
 
   return (
     <Router>
