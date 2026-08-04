@@ -36,8 +36,8 @@ export function GoalDialog({ open, onOpenChange, goal, onSave }: GoalDialogProps
     if (!open) return
     setName(goal?.name ?? "")
     setDescription(goal?.description ?? "")
-    setStartDate(toDateInput(goal?.start_date) || new Date().toISOString().slice(0, 10))
-    setTargetDate(toDateInput(goal?.target_date))
+    setStartDate(toDateInput(goal?.startDate) || new Date().toISOString().slice(0, 10))
+    setTargetDate(toDateInput(goal?.targetDate))
   }, [open, goal])
 
   function handleSubmit(event: React.FormEvent) {
@@ -48,8 +48,8 @@ export function GoalDialog({ open, onOpenChange, goal, onSave }: GoalDialogProps
       userId: goal?.userId ?? 1, // Default user ID for new goals
       name: name.trim(),
       description: description.trim() || undefined,
-      start_date: new Date(startDate || Date.now()).toISOString(),
-      target_date: new Date(`${targetDate}T23:59:59`).toISOString(),
+      startDate: new Date(startDate || Date.now()).toISOString(),
+      targetDate: new Date(`${targetDate}T23:59:59`).toISOString(),
       completed: goal?.completed,
       created_at: goal?.created_at || new Date().toISOString(),
       updated_at: new Date().toISOString(),

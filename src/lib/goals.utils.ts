@@ -13,14 +13,14 @@ export function getTimeRemaining(target: string, now: number = Date.now()): Time
 /** Derives the display status of a goal at a given moment. */
 export function getGoalStatus(goal: Goal, now: number = Date.now()): GoalStatus {
   if (goal.completed) return "completed"
-  if (new Date(goal.target_date).getTime() <= now) return "overdue"
+  if (new Date(goal.targetDate).getTime() <= now) return "overdue"
   return "active"
 }
 
 /** Overall progress (0-100) between start and target dates. */
 export function getProgress(goal: Goal, now: number = Date.now()): number {
-  const start = new Date(goal.start_date).getTime()
-  const end = new Date(goal.target_date).getTime()
+  const start = new Date(goal.startDate).getTime()
+  const end = new Date(goal.targetDate).getTime()
   if (end <= start) return 100
   const pct = ((now - start) / (end - start)) * 100
   return Math.min(100, Math.max(0, pct))

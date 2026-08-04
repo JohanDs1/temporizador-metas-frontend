@@ -50,7 +50,7 @@ function formatDate(iso: string): string {
 
 export function GoalCard({ goal, now, mounted = true, onEdit, onDelete }: GoalCardProps) {
   const status = getGoalStatus(goal, now)
-  const time = getTimeRemaining(goal.target_date, now)
+  const time = getTimeRemaining(goal.targetDate, now)
   const progress = getProgress(goal, now)
   const meta = STATUS_META[status]
 
@@ -111,7 +111,7 @@ export function GoalCard({ goal, now, mounted = true, onEdit, onDelete }: GoalCa
 
       <footer className="mt-5 flex items-center gap-2 text-sm text-muted-foreground">
         <CalendarDays className="size-4 shrink-0" aria-hidden="true" />
-        <span>Fecha objetivo: {formatDate(goal.target_date)}</span>
+        <span>Fecha objetivo: {formatDate(goal.targetDate)}</span>
       </footer>
     </article>
   )
